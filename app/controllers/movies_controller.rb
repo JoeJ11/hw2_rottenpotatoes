@@ -7,7 +7,22 @@ class MoviesController < ApplicationController
   end
 
   def index
-	@movies = Movie.all
+    @movies = []
+    @rating_flag = {}
+	@all_ratings = Movie.get_all_ratings
+    if params.has_key?(:ratings)
+      selected_ratings = params[:ratings]
+      selected_ratings.each do |key, content|
+        @rating_flag[key] = true
+        @movies += Movie.find_all_by_rating(key)
+      end
+    else
+      @all_ratings.each do |x|
+        @rating_flag[x] = true
+      end
+      @movies = Movie.all
+    end
+
 	if params[:sort_by] == 'title'
       @movies = @movies.sort_by do |x|
         x.title
