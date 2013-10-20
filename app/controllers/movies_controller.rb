@@ -11,6 +11,17 @@ class MoviesController < ApplicationController
     @rating_flag = {}
 	@all_ratings = Movie.get_all_ratings
     redirect_flag = false
+    
+    if !session
+      list = Hash.new
+      @all_ratings.each do |x|
+        @rating_flag[x] = true
+        list[x] = true
+      end
+      @movies = Movie.all
+      session[:ratings] = list
+      #session[:sort_by] = ""
+    end
 
     if params.has_key?(:data_package)
       list = params[:data_package]
@@ -28,12 +39,11 @@ class MoviesController < ApplicationController
       end
     elsif session.has_key?(:ratings)
       redirect_flag = true
-    else
-      @all_ratings.each do |x|
-        @rating_flag[x] = true
-        session[:ratings][x] = true
-      end
-      @movies = Movie.all
+    #else
+    #  @all_ratings.each do |x|
+    #    @rating_flag[x] = true
+    #  end
+    #  @movies = Movie.all
     end
 
     if params.has_key?(:sort_by)
