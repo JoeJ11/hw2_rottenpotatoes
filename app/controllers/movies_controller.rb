@@ -39,11 +39,11 @@ class MoviesController < ApplicationController
       end
     elsif session.has_key?(:ratings)
       redirect_flag = true
-    #else
-    #  @all_ratings.each do |x|
-    #    @rating_flag[x] = true
-    #  end
-    #  @movies = Movie.all
+    else
+      @all_ratings.each do |x|
+        @rating_flag[x] = true
+      end
+      @movies = Movie.all
     end
 
     if params.has_key?(:sort_by)
